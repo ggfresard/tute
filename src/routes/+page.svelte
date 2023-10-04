@@ -1,59 +1,42 @@
-<script>
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
+<script lang="ts">
+	import { onMount } from 'svelte'
+	import { io } from '$lib/socket'
+	import { notifications } from '$lib/toast/notifications'
+	import Lobby from './Lobby.svelte'
+	import Game from './Game.svelte'
+	import { Paths, availableGames, path, game, players, gameState } from '$lib/store'
+	onMount(() => {
+		io.onAny((event, ...args) => {
+			console.log(event, args)
+		})
+		io.on('games', (games) => {
+			availableGames.set(games)
+		})
+		io.on('room-exists', () => {
+			notifications.danger('Ya existe una sala con ese nombre')
+		})
+		io.on('room-full', () => {
+			notifications.danger('La sala esta llena')
+		})
+		io.on('room-doesnt-exist', () => {
+			notifications.danger('La sala no existe')
+		})
+		io.on('waiting-for-players', (state) => {
+			$path = Paths.Waiting
+			$game = state.name
+			$players = state.players
+		})
+		io.on('game-state', (state) => {
+			$gameState = state
+			$path = Paths.Game
+		})
+	})
 </script>
 
-<svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
-</svelte:head>
-
-<section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcome_fallback} alt="Welcome" />
-			</picture>
-		</span>
-
-		to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-
-	<Counter />
-</section>
-
-<style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
-	}
-
-	h1 {
-		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
-	}
-</style>
+<div class="h-screen p-20 flex bg-delft_blue-400">
+	{#if $path === 'game'}
+		<Game />
+	{:else}
+		<Lobby />
+	{/if}
+</div>
