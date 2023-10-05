@@ -7,6 +7,7 @@
 	const { CARD_HEIGHT, CARD_WIDTH } = config
 
 	export let i: number
+	let el = {}
 
 	$: index = $gameState.index
 
@@ -21,50 +22,53 @@
 			middle: 'card-middle',
 			right: 'card-right'
 		}[position] ?? 'card-middle'
+
 	export let card: Card
 
 	$: getOutAnimationParams = () => {
 		if (mod($gameState.lastWinner - index, 3) === 0) {
 			if (position === 'left') {
-				return { x: 400, y: 400, duration: 3000 }
+				return { x: 400, y: 400, duration: 1000 }
 			} else if (position === 'right') {
-				return { x: -400, y: -400, duration: 3000 }
+				return { x: -400, y: -400, duration: 1000 }
 			} else {
-				return { x: -400, y: 200, duration: 3000 }
+				return { x: -400, y: 200, duration: 1000 }
 			}
 		}
 		if (mod($gameState.lastWinner - index, 3) === 1) {
 			if (position === 'left') {
-				return { x: -200, y: -800, duration: 3000 }
+				return { x: -200, y: -800, duration: 1000 }
 			} else if (position === 'right') {
-				return { x: 200, y: 400, duration: 3000 }
+				return { x: 200, y: 400, duration: 1000 }
 			} else {
-				return { x: 400, y: -400, duration: 3000 }
+				return { x: 400, y: -400, duration: 1000 }
 			}
 		} else {
 			if (position === 'left') {
-				return { x: -200, y: 400, duration: 3000 }
+				return { x: -200, y: 400, duration: 1000 }
 			} else if (position === 'right') {
-				return { x: 200, y: -800, duration: 3000 }
+				return { x: 200, y: -800, duration: 1000 }
 			} else {
-				return { x: -400, y: -400, duration: 3000 }
+				return { x: -400, y: -400, duration: 1000 }
 			}
 		}
 	}
 </script>
 
 <!-- svelte-ignore a11y-missing-attribute -->
-{#if card}
+{#key card ? card.number + card.type : i}
 	<img
+		bind:this={el}
 		out:fly={getOutAnimationParams()}
-		class={`${animation} bg-red-900`}
+		class={`${animation} `}
 		style={`
-        height: ${CARD_HEIGHT}px;
-        width: ${CARD_WIDTH}px;
-    `}
+	height: ${CARD_HEIGHT}px;
+	width: ${CARD_WIDTH}px;
+	opacity: ${card ? 1 : 0};
+	`}
 		src={getImageUrl(card, true)}
 	/>
-{/if}
+{/key}
 
 <style>
 	@keyframes appear-middle {

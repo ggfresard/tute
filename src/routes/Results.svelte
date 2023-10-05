@@ -3,6 +3,7 @@
 	import { gameState, results } from '$lib/store'
 	import { config } from '$lib/config'
 	import CardStack from './CardStack.svelte'
+	import { fade } from 'svelte/transition'
 	const { CARD_HEIGHT, CARD_WIDTH } = config
 </script>
 
@@ -10,7 +11,11 @@
 	<div
 		class="w-screen h-screen flex justify-center items-center pt-5 z-[200] fixed left-0 bottom-0 bg-delft_blue-200 bg-opacity-90"
 	>
-		<div class="rounded-lg bg-cambridge_blue-400 shadow p-3 flex flex-col gap-2 items-center">
+		<div
+			in:fade
+			out:fade
+			class="rounded-lg bg-cambridge_blue-400 shadow p-3 flex flex-col gap-2 items-center"
+		>
 			{#if $results.type === 'tute'}
 				<div class="text-4xl text-delft_blue-400 font-bold">
 					Tute de {$results.player}!
