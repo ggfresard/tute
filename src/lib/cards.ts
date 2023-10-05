@@ -5,8 +5,19 @@ export interface GameState {
 	sings: CardTypes[]
 	turn: number
 	waiting: boolean
-	sing: CardTypes | null
-	players: { name: string; sings: CardTypes[] }[]
+	fail: CardTypes | null
+	players: {
+		name: string
+		sings: CardTypes[]
+		stack: number
+		points: number
+	}[]
+	firstCard?: Card
+	game: string
+	lastWinner: number
+	status: string
+	name: string
+	index: number
 }
 
 export enum CardTypes {
@@ -49,19 +60,34 @@ const cardColumn: { [key in CardNumbers]: number } = {
 	[CardNumbers.TEN]: 12
 }
 
+const cardValues: { [key in CardNumbers]: number } = {
+	[CardNumbers.ONE]: 11,
+	[CardNumbers.TWO]: -5,
+	[CardNumbers.THREE]: 10,
+	[CardNumbers.FOUR]: -4,
+	[CardNumbers.FIVE]: -3,
+	[CardNumbers.SIX]: -3,
+	[CardNumbers.SEVEN]: -1,
+	[CardNumbers.EIGHT]: 2,
+	[CardNumbers.NINE]: 3,
+	[CardNumbers.TEN]: 4
+}
+
 export interface Card {
 	type: CardTypes
 	number: CardNumbers
-	fliped: boolean
+	playable?: boolean
 }
 
-export const getImageUrl = (card: Card | null) =>
-	card ? `/cards/row-${cardRows[card.type]}-column-${cardColumn[card.number]}.png` : ''
+export const getImageUrl = (card: Card | null, debug?: boolean) => {
+	debug && console.log(card?.number, card?.type)
+	return card ? `/cards/row-${cardRows[card.type]}-column-${cardColumn[card.number]}.png` : ''
+}
 
 export const orderedHand = (hand: Card[]) =>
 	hand.sort((a, b) => {
 		if (a.type === b.type) {
-			return cardColumn[a.number] - cardColumn[b.number]
+			return cardValues[a.number] - cardValues[b.number]
 		}
 		return cardRows[a.type] - cardRows[b.type]
 	})

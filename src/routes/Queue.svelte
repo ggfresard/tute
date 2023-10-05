@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { game, players } from '$lib/store'
+	import { io } from '$lib/socket'
+	import { game, players, name } from '$lib/store'
 </script>
 
 <div
@@ -13,7 +14,19 @@
 			{player}
 		</div>
 	{/each}
-	<div class="text-lg text-center p-2 text-delft_blue-400">
-		Esperando jugadores... {$players.length}/3
-	</div>
+	{#if $players.length === 3}
+		<button
+			class="w-full"
+			on:click={() => {
+				io.emit('begin-match', {
+					game: $game,
+					username: $name
+				})
+			}}>Comenzar Partida</button
+		>
+	{:else}
+		<div class="text-lg text-center p-2 text-delft_blue-400">
+			Esperando jugadores... {$players.length}/3
+		</div>
+	{/if}
 </div>

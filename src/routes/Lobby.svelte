@@ -50,7 +50,7 @@
 			<button
 				class="w-[500px] fade-in"
 				on:click={() => {
-					$path = Paths.Join
+					$path = Paths.None
 				}}>Atras</button
 			>
 		{/if}

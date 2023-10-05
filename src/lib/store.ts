@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store'
-import type { GameState } from './cards'
+import type { Card, CardNumbers, CardTypes, GameState } from './cards'
 
 export enum Paths {
 	None = '',
@@ -20,3 +20,45 @@ export const availableGames = writable<
 	}[]
 >([])
 export const gameState = writable<GameState>()
+export const question = writable<
+	| {
+			question: string
+			options: {
+				[key: string]: never
+			}
+			response: {
+				message: string
+				params: {
+					[key: string]: never
+				}
+				responseKey: string
+			}
+	  }
+	| undefined
+>()
+
+export const results = writable<
+	| {
+			type: 'tute'
+			player: string
+			tuteType: CardNumbers.TEN | CardNumbers.NINE
+	  }
+	| {
+			type: 'capote'
+			player: string
+			positive: boolean
+	  }
+	| {
+			type: 'normal'
+			loosers: string[]
+			players: {
+				name: string
+				points: number
+				stack: Card[]
+				sings: CardTypes[]
+				total: number
+			}[]
+			last: number
+	  }
+	| undefined
+>()
