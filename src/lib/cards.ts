@@ -1,3 +1,5 @@
+import { cardImages } from './cardImages'
+
 export interface GameState {
 	table: [Card, Card, Card]
 	hand: Card[]
@@ -81,7 +83,8 @@ export interface Card {
 
 export const getImageUrl = (card: Card | null, debug?: boolean) => {
 	debug && console.log(card?.number, card?.type)
-	return card ? `/cards/row-${cardRows[card.type]}-column-${cardColumn[card.number]}.png` : ''
+	if (!card) return ''
+	return cardImages[card.type][card.number]
 }
 
 export const orderedHand = (hand: Card[]) =>
