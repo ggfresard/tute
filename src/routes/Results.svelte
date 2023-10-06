@@ -104,7 +104,14 @@
 								<div class="flex items-center gap-1">Diez de ultima: 10</div>
 							{/if}
 						</div>
-						<div class="text-xl text-delft_blue-400 font-bold">Total: {player.total}</div>
+						<div class="text-xl text-delft_blue-400 font-bold flex gap-2 items-center">
+							Total: {player.total}
+							{#if $results.loosers.includes(player.name)}
+								💀
+							{:else}
+								🏆
+							{/if}
+						</div>
 					</div>
 				{/each}
 				<div class="text-2xl text-delft_blue-400 font-bold">
