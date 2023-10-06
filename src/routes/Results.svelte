@@ -95,7 +95,7 @@
 									/>
 									:
 									{player.sings.reduce(
-										(acc, curr) => acc + (curr === $gameState.fail ? 20 : 10),
+										(acc, curr) => acc + (curr === $gameState.fail ? 40 : 20),
 										0
 									)}
 								</div>

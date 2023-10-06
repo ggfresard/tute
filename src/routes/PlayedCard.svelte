@@ -60,7 +60,7 @@
 	<img
 		bind:this={el}
 		out:fly={getOutAnimationParams()}
-		class={`${animation} `}
+		class={`${animation} z-40`}
 		style={`
 	height: ${CARD_HEIGHT}px;
 	width: ${CARD_WIDTH}px;

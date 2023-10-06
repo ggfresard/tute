@@ -17,7 +17,7 @@
 </script>
 
 <div
-	class="w-full flex justify-center absolute right-0 translate-x-[110%] bottom-0"
+	class="w-full flex justify-center absolute right-0 translate-x-[110%] bottom-0 z-40"
 	style={`
             height: ${CARD_HEIGHT}px;
         `}

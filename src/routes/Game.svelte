@@ -38,7 +38,7 @@
 		/>
 
 		<div
-			class="absolute left-1/2 -translate-x-1/2 top-10 bg-cambridge_blue-600 w-[500px] h-[400px] rounded-lg"
+			class="absolute left-1/2 -translate-x-1/2 top-10 z-30 bg-cambridge_blue-600 w-[500px] h-[400px] rounded-lg"
 		>
 			<div class="relative h-full w-full">
 				{#each $gameState.table as card, i}

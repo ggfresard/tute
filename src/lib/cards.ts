@@ -53,7 +53,7 @@ const cardValues: { [key in CardNumbers]: number } = {
 	[CardNumbers.THREE]: 10,
 	[CardNumbers.FOUR]: -4,
 	[CardNumbers.FIVE]: -3,
-	[CardNumbers.SIX]: -3,
+	[CardNumbers.SIX]: -2,
 	[CardNumbers.SEVEN]: -1,
 	[CardNumbers.EIGHT]: 2,
 	[CardNumbers.NINE]: 3,

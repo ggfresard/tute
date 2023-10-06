@@ -19,7 +19,7 @@
 	}`}
 >
 	<div
-		class={`flex flex-col justify-start w-[160px] relative items-start gap-2 ${
+		class={`flex z-40 flex-col justify-start w-[160px] relative items-start gap-2 ${
 			position !== 'right' ? 'left-3' : 'right-3'
 		} p-3 ${
 			position === 'middle' ? 'rounded-t-xl' : 'rounded-b-xl'

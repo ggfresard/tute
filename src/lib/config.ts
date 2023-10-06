@@ -1,5 +1,5 @@
 export const config = {
 	CARD_WIDTH: 120,
 	CARD_HEIGHT: 200,
-	CARD_SPACING: 30
+	CARD_SPACING: 50
 }
