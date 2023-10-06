@@ -14,7 +14,7 @@
 		question,
 		results
 	} from '$lib/store'
-	import { fade } from 'svelte/transition'
+	import Question from './Question.svelte'
 	onMount(() => {
 		io.onAny((event, ...args) => {
 			console.log(event, args)
@@ -53,6 +53,7 @@
 </script>
 
 <div class="h-screen p-20 flex bg-delft_blue-400 relative">
+	<Question />
 	{#if $path === 'game'}
 		<Game />
 	{:else}
