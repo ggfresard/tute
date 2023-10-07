@@ -1,5 +1,5 @@
 export interface GameState {
-	table: [Card, Card, Card]
+	table: Card[]
 	hand: Card[]
 	stack: Card[]
 	sings: CardTypes[]

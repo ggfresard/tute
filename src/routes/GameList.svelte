@@ -19,7 +19,7 @@
 						Juego de {item.name}
 					</div>
 					<div class="">
-						{item.players}/3
+						{item.players}/5
 					</div>
 				</div>
 			</button>

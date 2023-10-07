@@ -1,14 +1,13 @@
 <script lang="ts">
 	import Hand from './Hand.svelte'
 	import { config } from '$lib/config'
-	import { gameState, name } from '$lib/store'
+	import { gameState, name, players } from '$lib/store'
 	import { CardNumbers, CardTypes, getImageUrl, sameCard, type Card } from '$lib/cards'
 	import PlayedCard from './PlayedCard.svelte'
 	import NameTag from './NameTag.svelte'
 	import Results from './Results.svelte'
-	import { mod } from '$lib'
 	import FinalResults from './FinalResults.svelte'
-	const { CARD_WIDTH, CARD_HEIGHT } = config
+	const { CARD_WIDTH, CARD_HEIGHT, BOARD_Y_OFFSET } = config
 	$: index = $gameState.players.findIndex((player) => player.name === $name)
 </script>
 
@@ -18,15 +17,16 @@
 	<FinalResults />
 	<Results />
 	{#if $gameState.status !== 'finished'}
-		<NameTag player={$gameState.players[index]} position="middle">
-			<Hand />
-		</NameTag>
-		<NameTag player={$gameState.players[mod(index + 2, 3)]} position="left" />
-		<NameTag player={$gameState.players[mod(index + 1, 3)]} position="right" />
-
+		{#each $gameState.players as player}
+			<NameTag {player}>
+				{#if player.name === $name}
+					<Hand />
+				{/if}
+			</NameTag>
+		{/each}
 		<!-- svelte-ignore a11y-missing-attribute -->
 		<img
-			class="absolute right-3 bottom-3"
+			class="absolute right-3 top-1/2 -translate-y-1/2 z-20"
 			style={`
 				height: ${CARD_HEIGHT}px;
 				width: ${CARD_WIDTH}px;
@@ -38,13 +38,11 @@
 		/>
 
 		<div
-			class="absolute left-1/2 -translate-x-1/2 top-10 z-30 bg-cambridge_blue-600 w-[500px] h-[400px] rounded-lg"
-		>
-			<div class="relative h-full w-full">
-				{#each $gameState.table as card, i}
-					<PlayedCard {card} {i} />
-				{/each}
-			</div>
-		</div>
+			class="absolute left-1/2 -translate-x-1/2 top-1/2 z-30 bg-cambridge_blue-600 w-[500px] h-[400px] rounded-lg"
+			style={`transform: translateX(-50%) translateY(-50%) translateY(-${BOARD_Y_OFFSET}px); opacity: 0.5;`}
+		/>
+		{#each $gameState.table as card, i}
+			<PlayedCard {card} {i} />
+		{/each}
 	{/if}
 </div>

@@ -14,7 +14,7 @@
 			{player}
 		</div>
 	{/each}
-	{#if $players.length === 3}
+	{#if $players.length >= 3}
 		<button
 			class="w-full"
 			on:click={() => {
@@ -26,7 +26,7 @@
 		>
 	{:else}
 		<div class="text-lg text-center p-2 text-delft_blue-400">
-			Esperando jugadores... {$players.length}/3
+			Esperando jugadores... {$players.length}/5
 		</div>
 	{/if}
 </div>
