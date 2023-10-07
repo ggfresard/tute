@@ -50,11 +50,6 @@
 		justify-content: center;
     `}
 				on:click={() => {
-					console.log('play-card', {
-						card,
-						player: $name,
-						game: $game
-					})
 					io.emit('play-card', {
 						card,
 						player: $name,

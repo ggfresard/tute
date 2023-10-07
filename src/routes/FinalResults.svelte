@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { io } from '$lib/socket'
-	import { Paths, gameState, path, players } from '$lib/store'
+	import { Paths, gameState, path } from '$lib/store'
 
 	$: places = Array.from(new Set($gameState.players.map((player) => player.points))).sort()
 </script>

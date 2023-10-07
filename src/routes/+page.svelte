@@ -16,9 +16,6 @@
 	} from '$lib/store'
 	import Question from './Question.svelte'
 	onMount(() => {
-		io.onAny((event, ...args) => {
-			console.log(event, args)
-		})
 		io.on('games', (games) => {
 			availableGames.set(games)
 		})
@@ -52,7 +49,7 @@
 	})
 </script>
 
-<div class="h-screen p-20 flex bg-delft_blue-400 relative">
+<div class="h-screen p-10 flex bg-delft_blue-400 relative">
 	<Question />
 	{#if $path === 'game'}
 		<Game />

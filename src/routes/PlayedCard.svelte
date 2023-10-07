@@ -1,150 +1,53 @@
 <script lang="ts">
-	import { getImageUrl, type Card } from '$lib/cards'
-	import { config } from '$lib/config'
-	import { gameState, name } from '$lib/store'
+	import { getImageUrl, type Card, sameCard, CardTypes, CardNumbers } from '$lib/cards'
+	import { Positions, config, layout, positionValues } from '$lib/config'
+	import type { Range } from '$lib'
+	import { gameState } from '$lib/store'
 	import { mod } from '$lib'
-	import { fly } from 'svelte/transition'
-	const { CARD_HEIGHT, CARD_WIDTH } = config
-
-	export let i: number
-	let el = {}
-
-	$: index = $gameState.index
-
-	$: position = {
-		[0]: 'middle',
-		[1]: 'right',
-		[2]: 'left'
-	}[mod(i - $gameState.index, 3)]
-	$: animation =
-		{
-			left: 'card-left',
-			middle: 'card-middle',
-			right: 'card-right'
-		}[position] ?? 'card-middle'
+	import { fadeTowards } from '$lib/transitions'
+	const { CARD_HEIGHT, CARD_WIDTH, BOARD_Y_OFFSET, BOARD_X_OFFSET } = config
 
 	export let card: Card
+	let el = {}
+	export let i: number
+	const offset = 150
 
-	$: getOutAnimationParams = () => {
-		if (mod($gameState.lastWinner - index, 3) === 0) {
-			if (position === 'left') {
-				return { x: 400, y: 400, duration: 1000 }
-			} else if (position === 'right') {
-				return { x: -400, y: -400, duration: 1000 }
-			} else {
-				return { x: -400, y: 200, duration: 1000 }
-			}
-		}
-		if (mod($gameState.lastWinner - index, 3) === 1) {
-			if (position === 'left') {
-				return { x: -200, y: -800, duration: 1000 }
-			} else if (position === 'right') {
-				return { x: 200, y: 400, duration: 1000 }
-			} else {
-				return { x: 400, y: -400, duration: 1000 }
-			}
-		} else {
-			if (position === 'left') {
-				return { x: -200, y: 400, duration: 1000 }
-			} else if (position === 'right') {
-				return { x: 200, y: -800, duration: 1000 }
-			} else {
-				return { x: -400, y: -400, duration: 1000 }
-			}
-		}
-	}
+	$: index = mod(i - $gameState.index, $gameState.players.length) as Range<0, 5>
+	$: winnerIndex = mod($gameState.lastWinner - $gameState.index, $gameState.players.length)
+
+	$: total = $gameState.players.length
+
+	$: angle = ((-2 * index + (total === 3 ? 0 : 1)) * 180) / total
+	$: x =
+		-offset * Math.sin((angle / 180) * Math.PI) -
+		0.5 * CARD_WIDTH +
+		(Math.abs(angle % 180) === 0
+			? 0
+			: -Math.sign(Math.sin((angle / 180) * Math.PI)) * BOARD_X_OFFSET)
+
+	$: y = offset * Math.cos((angle / 180) * Math.PI) - 0.5 * CARD_HEIGHT - BOARD_Y_OFFSET
+	$: outTowards =
+		positionValues[layout[$gameState.players.length as Range<3, 5>][winnerIndex] as Positions]
+	$: inTowards =
+		positionValues[layout[$gameState.players.length as Range<3, 5>][index] as Positions]
 </script>
 
 <!-- svelte-ignore a11y-missing-attribute -->
-{#key card ? card.number + card.type : i}
+{#key card ? card.number + card.type : index}
 	<img
 		bind:this={el}
-		out:fly={getOutAnimationParams()}
-		class={`${animation} z-40`}
+		out:fadeTowards={outTowards}
+		in:fadeTowards={inTowards}
 		style={`
 	height: ${CARD_HEIGHT}px;
 	width: ${CARD_WIDTH}px;
 	opacity: ${card ? 1 : 0};
+	transform: translate(${x}px, ${y}px) rotate(${angle}deg);
+	left: 50%;
+	top: 50%;
+	position: absolute;
+	z-index: ${40};
 	`}
-		src={getImageUrl(card, true)}
+		src={getImageUrl(card)}
 	/>
 {/key}
-
-<style>
-	@keyframes appear-middle {
-		0% {
-			left: 0;
-			opacity: 0;
-			transform: translateX(-50%) rotate(90deg);
-			bottom: -200px;
-		}
-
-		100% {
-			left: 50%;
-			opacity: 1;
-			transform: translateX(-50%) rotate(0deg);
-			bottom: -50px;
-		}
-	}
-
-	.card-middle {
-		border-radius: 10px;
-		position: absolute;
-		left: 50%;
-		transform: translateX(-50%) rotate(0deg);
-		animation-name: appear-middle;
-		animation-duration: 0.5s;
-		bottom: -50px;
-	}
-
-	@keyframes appear-left {
-		0% {
-			left: -200px;
-			opacity: 0;
-			transform: rotate(0deg);
-			top: 0%;
-		}
-
-		100% {
-			left: 0px;
-			opacity: 1;
-			transform: translateY(-50%) rotate(90deg);
-			top: 50%;
-		}
-	}
-
-	.card-left {
-		border-radius: 10px;
-		position: absolute;
-		top: 50%;
-		transform: translateY(-50%) rotate(90deg);
-		animation-name: appear-left;
-		animation-duration: 0.5s;
-	}
-
-	@keyframes appear-right {
-		0% {
-			right: -200px;
-			opacity: 0;
-			transform: rotate(0deg);
-			top: 0%;
-		}
-
-		100% {
-			right: 0px;
-			opacity: 1;
-			transform: translateY(-50%) rotate(-90deg);
-			top: 50%;
-		}
-	}
-
-	.card-right {
-		border-radius: 10px;
-		position: absolute;
-		top: 50%;
-		right: 0px;
-		transform: translateY(-50%) rotate(-90deg);
-		animation-name: appear-right;
-		animation-duration: 0.5s;
-	}
-</style>
