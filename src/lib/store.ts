@@ -13,6 +13,7 @@ export const name = writable('')
 export const players = writable<string[]>([])
 export const game = writable('')
 export const path = writable<Paths>(Paths.None)
+export const session = writable<string | undefined>()
 export const availableGames = writable<
 	{
 		name: string
@@ -59,6 +60,7 @@ export const results = writable<
 				total: number
 			}[]
 			last: number
+			fail: CardTypes
 	  }
 	| undefined
 >()

@@ -30,6 +30,7 @@
 					class="flex-1"
 					disabled={!$name.length}
 					on:click={() => {
+						io.emit('join', $name)
 						io.emit('create-game', $name)
 						notifications.success('Creando juego...')
 					}}>Crear Nuevo Juego</button
