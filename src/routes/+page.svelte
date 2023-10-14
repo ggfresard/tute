@@ -15,6 +15,8 @@
 		results
 	} from '$lib/store'
 	import Question from './Question.svelte'
+	import { isMobile } from '$lib'
+	import LobbyMobile from './LobbyMobile.svelte'
 	onMount(() => {
 		io.on('games', (games) => {
 			availableGames.set(games)
@@ -46,14 +48,19 @@
 		io.on('resolve-round', (result) => {
 			$results = result
 		})
+		io.on('recover-game', (state) => {
+			$gameState = state
+			$game = state.name
+			if (state.status === 'match') $path = Paths.Game
+		})
 	})
 </script>
 
-<div class="h-screen p-10 flex bg-delft_blue-400 relative">
+<div class="h-screen flex bg-delft_blue-400 relative">
 	<Question />
 	{#if $path === 'game'}
 		<Game />
 	{:else}
-		<Lobby />
+		<LobbyMobile />
 	{/if}
 </div>

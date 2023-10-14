@@ -17,12 +17,25 @@
 	animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+body {
+	font-family: 'Fredoka', sans-serif;
+}
+
+@font-face {
+	font-family: 'Fredoka';
+	src: url('/assets/Fredoka.ttf') format('truetype');
+}
+
 @layer components {
-	button {
+	butto {
 		@apply bg-cambridge_blue-300 disabled:opacity-50 disabled:pointer-events-none text-eggshell-400 rounded p-2 active:translate-y-0  font-bold py-2 px-4 focus:outline-none hover:-translate-y-1 transition-transform shadow-md hover:shadow-lg active:shadow-md;
 	}
 
-	button:disabled {
+	button {
+		@apply active:translate-y-0 focus:outline-none hover:-translate-y-1 transition-transform;
+	}
+
+	butto:disabled {
 		@apply bg-cambridge_blue-100 text-eggshell-400 rounded p-2 active:translate-y-0  font-bold py-2 px-4 focus:outline-none hover:-translate-y-1 transition-transform shadow-md hover:shadow-lg active:shadow-md;
 	}
 

@@ -88,16 +88,14 @@
 								</div>
 							{/if}
 							{#if player.sings.length}
+								{@const fail = $results.fail}
 								<div class="flex items-center gap-1">
 									Cantos
 									<CardStack
 										cards={player.sings.map((sing) => ({ number: CardNumbers.ONE, type: sing }))}
 									/>
 									:
-									{player.sings.reduce(
-										(acc, curr) => acc + (curr === $gameState.fail ? 40 : 20),
-										0
-									)}
+									{player.sings.reduce((acc, curr) => acc + (curr === fail ? 40 : 20), 0)}
 								</div>
 							{/if}
 							{#if $results.players.findIndex((p) => p.name === player.name) === $results.last}
